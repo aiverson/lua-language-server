@@ -1,0 +1,328 @@
+{
+	"name": "Terra",
+	"scopeName": "source.terra",
+	"patterns": [
+		{
+			"begin": "\\b(?:(local)\\s+)?(function|terra)\\b",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.local.terra"
+				},
+				"2": {
+					"name": "keyword.control.terra"
+				}
+			},
+			"end": "(?=[\\)\\-:{}\\[\\]\"'])",
+			"name": "meta.function.terra",
+			"patterns": [
+				{
+					"include": "#comment"
+				},
+				{
+					"begin": "(\\()",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.definition.parameters.begin.terra"
+						}
+					},
+					"end": "(?=[\\)\\-\\.:{}\\[\\]\"'])",
+					"endCaptures": {
+						"1": {
+							"name": "punctuation.definition.parameters.finish.terra"
+						}
+					},
+					"name": "meta.parameter.terra",
+					"patterns": [
+						{
+							"include": "#comment"
+						},
+						{
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*",
+							"name": "variable.parameter.function.terra"
+						},
+						{
+							"match": ",",
+							"name": "punctuation.separator.arguments.terra"
+						}
+					]
+				},
+				{
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b\\s*(?=:)",
+					"name": "entity.name.class.terra"
+				},
+				{
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"name": "entity.name.function.terra"
+				}
+			]
+		},
+		{
+			"match": "(?<![\\w\\d.])0[xX][0-9A-Fa-f]+(?![pPeE.0-9])",
+			"name": "constant.numeric.integer.hexadecimal.terra"
+		},
+		{
+			"match": "(?<![\\w\\d.])0[xX][0-9A-Fa-f]+(\\.[0-9A-Fa-f]+)?([eE]-?\\d*)?([pP][-+]\\d+)?",
+			"name": "constant.numeric.float.hexadecimal.terra"
+		},
+		{
+			"match": "(?<![\\w\\d.])\\d+(?![pPeE.0-9])",
+			"name": "constant.numeric.integer.terra"
+		},
+		{
+			"match": "(?<![\\w\\d.])\\d+(\\.\\d+)?([eE]-?\\d*)?",
+			"name": "constant.numeric.float.terra"
+		},
+		{
+			"begin": "'",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.terra"
+				}
+			},
+			"end": "'",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.terra"
+				}
+			},
+			"name": "string.quoted.single.terra",
+			"patterns": [
+				{
+					"include": "#escaped_char"
+				}
+			]
+		},
+		{
+			"begin": "\"",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.terra"
+				}
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.terra"
+				}
+			},
+			"name": "string.quoted.double.terra",
+			"patterns": [
+				{
+					"include": "#escaped_char"
+				}
+			]
+		},
+		{
+			"begin": "(?<=\\.cdef)\\s*(\\[(=*)\\[)",
+			"beginCaptures": {
+				"0": {
+					"name": "string.quoted.other.multiline.terra"
+				},
+				"1": {
+					"name": "punctuation.definition.string.begin.terra"
+				}
+			},
+			"contentName": "meta.embedded.terra",
+			"end": "(\\]\\2\\])",
+			"endCaptures": {
+				"0": {
+					"name": "string.quoted.other.multiline.terra"
+				},
+				"1": {
+					"name": "punctuation.definition.string.end.terra"
+				}
+			},
+			"patterns": [
+				{
+					"include": "source.c"
+				}
+			]
+		},
+		{
+			"begin": "(?<!--)\\[(=*)\\[",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.terra"
+				}
+			},
+			"end": "\\]\\1\\]",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.terra"
+				}
+			},
+			"name": "string.quoted.other.multiline.terra"
+		},
+		{
+			"captures": {
+				"1": {
+					"name": "punctuation.definition.comment.terra"
+				}
+			},
+			"match": "\\A(#!).*$\\n?",
+			"name": "comment.line.shebang.terra"
+		},
+		{
+			"include": "#comment"
+		},
+		{
+			"captures": {
+				"1": {
+					"name": "keyword.control.goto.terra"
+				},
+				"2": {
+					"name": "string.tag.terra"
+				}
+			},
+			"match": "\\b(goto)\\s+([a-zA-Z_][a-zA-Z0-9_]*)"
+		},
+		{
+			"captures": {
+				"1": {
+					"name": "punctuation.section.embedded.begin.terra"
+				},
+				"2": {
+					"name": "punctuation.section.embedded.end.terra"
+				}
+			},
+			"match": "(::)\\s*[a-zA-Z_][a-zA-Z0-9_]*\\s*(::)",
+			"name": "string.tag.terra"
+		},
+		{
+			"match": "\\b(break|do|else|for|if|elseif|goto|return|then|repeat|while|until|end|in|quote|`|escape)\\b",
+			"name": "keyword.control.terra"
+		},
+		{
+			"match": "\\b(local|var)\\b",
+			"name": "keyword.local.terra"
+		},
+		{
+			"begin": "(?<=local|var)",
+			"end": "(?=[a-zA-Z_=])",
+			"patterns": [
+				{
+					"include": "#comment"
+				},
+				{
+					"match": "<\\s*([a-zA-Z_][a-zA-Z0-9_]*)",
+					"captures": {
+						"1": {
+							"name": "string.tag.terra"
+						}
+					}
+				}
+			]
+		},
+		{
+			"match": "\\b(function)\\b",
+			"name": "keyword.control.terra"
+		},
+		{
+			"match": "(?<![^.]\\.|:)\\b(false|nil|true|_G|_VERSION|math\\.(pi|huge)|utf8\\.charpattern|io\\.(stdin|stdout|stderr)|package\\.(config|cpath|loaded|loaders|path|preload|searchers))\\b|(?<![.])\\.{3}(?!\\.)",
+			"name": "constant.language.terra"
+		},
+		{
+			"match": "(?<![^.]\\.|:)\\b(self)\\b",
+			"name": "variable.language.self.terra"
+		},
+		{
+			"match": "(?<![^.]\\.|:)\\b(assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall)\\b(?!\\s*=(?!=))",
+			"name": "support.function.terra"
+		},
+		{
+			"match": "(?<![^.]\\.|:)\\b(coroutine\\.(create|isyieldable|close|resume|running|status|wrap|yield)|string\\.(byte|char|dump|find|format|gmatch|gsub|len|lower|match|pack|packsize|rep|reverse|sub|unpack|upper)|table\\.(concat|insert|maxn|move|pack|remove|sort|unpack)|math\\.(abs|acos|asin|atan2?|ceil|cosh?|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|pow|rad|random|randomseed|sinh?|sqrt|tanh?|type)|io\\.(close|flush|input|lines|open|output|popen|read|tmpfile|type|write)|os\\.(clock|date|difftime|execute|exit|getenv|remove|rename|setlocale|time|tmpname)|package\\.(loadlib|seeall|searchpath)|debug\\.(debug|[gs]etfenv|[gs]ethook|getinfo|[gs]etlocal|[gs]etmetatable|getregistry|[gs]etupvalue|[gs]etuservalue|traceback|upvalueid|upvaluejoin)|bit32\\.(arshift|band|bnot|bor|btest|bxor|extract|replace|lrotate|lshift|rrotate|rshift)|utf8\\.(char|codes|codepoint|len|offset))\\b(?!\\s*=(?!=))",
+			"name": "support.function.library.terra"
+		},
+		{
+			"match": "\\b(and|or|not)\\b",
+			"name": "keyword.operator.terra"
+		},
+		{
+			"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*(?:[({\"']|\\[\\[))",
+			"name": "entity.name.function.terra"
+		},
+		{
+			"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*:)",
+			"name": "entity.name.class.terra"
+		},
+		{
+			"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+			"name": "variable.other.terra"
+		},
+		{
+			"match": "\\+|-|%|#|\\*|\\/|\\^|==?|~=|<=?|>=?|<<|>>|(?<!\\.)\\.{2}(?!\\.)",
+			"name": "keyword.operator.terra"
+		}
+	],
+	"repository": {
+		"escaped_char": {
+			"patterns": [
+				{
+					"match": "\\\\[abfnrtvz\\\\\"'\\n]",
+					"name": "constant.character.escape.terra"
+				},
+				{
+					"match": "\\\\\\d{1,3}",
+					"name": "constant.character.escape.byte.terra"
+				},
+				{
+					"match": "\\\\x[0-9A-Fa-f][0-9A-Fa-f]",
+					"name": "constant.character.escape.byte.terra"
+				},
+				{
+					"match": "\\\\u\\{[0-9A-Fa-f]+\\}",
+					"name": "constant.character.escape.unicode.terra"
+				},
+				{
+					"match": "\\\\.",
+					"name": "invalid.illegal.character.escape.terra"
+				}
+			]
+		},
+		"comment": {
+			"patterns": [
+				{
+					"begin": "(^[ \\t]+)?(?=--)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.leading.terra"
+						}
+					},
+					"end": "(?!\\G)((?!^)[ \\t]+\\n)?",
+					"endCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.trailing.terra"
+						}
+					},
+					"patterns": [
+						{
+							"begin": "--\\[(=*)\\[",
+							"beginCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.begin.terra"
+								}
+							},
+							"end": "\\]\\1\\]",
+							"endCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.end.terra"
+								}
+							},
+							"name": "comment.block.terra"
+						},
+						{
+							"begin": "--",
+							"beginCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.terra"
+								}
+							},
+							"end": "\\n",
+							"name": "comment.line.double-dash.terra"
+						}
+					]
+				}
+			]
+		}
+	}
+}

@@ -1,13 +1,14 @@
 {
-    "__metadata": {
+    "--metadata": {
         "id": "3a15b5a7-be12-47e3-8445-88ee3eabc8b2",
         "publisherDisplayName": "sumneko",
         "publisherId": "fb626675-24cf-4881-8c13-b465f29bec2f"
     },
     "activationEvents": [
-        "onLanguage:lua"
+        "onLanguage:lua",
+        "onLanguage:terra"
     ],
-    "author": "sumneko",
+    "author": "aiverson",
     "categories": [
         "Linters",
         "Programming Languages",
@@ -300,33 +301,46 @@
             "title": "Lua",
             "type": "object"
         },
+        "languages": [{
+            "id": "terra",
+            "extensions": [
+                ".t", ".terra"
+            ],
+            "aliases": ["Terra", "terra"]
+        }],
         "grammars": [
             {
                 "language": "lua",
                 "path": "syntaxes/lua.tmLanguage.json",
                 "scopeName": "source.lua"
+            },
+            {
+                "language": "terra",
+                "path": "syntaxes/terra.tmLanguage.json",
+                "scopeName": "source.terra"
             }
         ]
     },
-    "description": "Lua Language Server coded by Lua",
-    "displayName": "Lua",
+    "description": "Lua-Terra Language Server coded by Lua",
+    "displayName": "Lua-Terra",
     "engines": {
         "vscode": "^1.23.0"
     },
     "icon": "images/logo.png",
     "keywords": [
         "Lua",
+        "Terra",
         "LSP",
         "GoTo Definition",
         "IntelliSense"
     ],
     "license": "MIT",
     "main": "./client/out/extension",
-    "name": "lua",
-    "publisher": "sumneko",
+    "name": "lua-terra",
+    "publisher": "aiverson",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sumneko/lua-language-server"
+        "url": "https://github.com/aiverson/lua-language-server"
     },
     "version": "0.11.5"
 }
